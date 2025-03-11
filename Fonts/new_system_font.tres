@@ -1,0 +1,5 @@
+[gd_resource type="SystemFont" format=3 uid="uid://0lji7hu3cvas"]
+
+[resource]
+font_names = PackedStringArray("Segoe Print")
+font_weight = 800

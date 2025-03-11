@@ -1,0 +1,87 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5ms3rtogvn86"]
+
+[ext_resource type="Material" uid="uid://ct4gnt2cnqge2" path="res://Materials/TableTop.tres" id="1_4ppvu"]
+[ext_resource type="Material" uid="uid://hofiycwp7x8q" path="res://Materials/Box.tres" id="2_r4jc3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7dm0k"]
+bounce = 0.42
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ig7tw"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qod8c"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qod8c"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_4ppvu"]
+
+[node name="Table" type="StaticBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_7dm0k")
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_ig7tw")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_4ppvu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+shape = SubResource("ConcavePolygonShape3D_qod8c")
+
+[node name="Box" type="Node3D" parent="."]
+
+[node name="BorderNorth" type="StaticBody3D" parent="Box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+physics_material_override = SubResource("PhysicsMaterial_7dm0k")
+
+[node name="Mesh3" type="MeshInstance3D" parent="Box/BorderNorth"]
+transform = Transform3D(-10.2, 0, 7.78829e-08, 0, 2, 0, -3.97203e-06, 0, -0.2, 0, 0, 0)
+mesh = SubResource("BoxMesh_qod8c")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("2_r4jc3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Box/BorderNorth"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.0860462)
+shape = SubResource("WorldBoundaryShape3D_4ppvu")
+
+[node name="BorderSouth" type="StaticBody3D" parent="Box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
+physics_material_override = SubResource("PhysicsMaterial_7dm0k")
+
+[node name="Mesh4" type="MeshInstance3D" parent="Box/BorderSouth"]
+transform = Transform3D(-10.2, 0, 3.01992e-08, 0, 2, 0, -1.54016e-06, 0, -0.2, 0, 0, 0)
+mesh = SubResource("BoxMesh_qod8c")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("2_r4jc3")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Box/BorderSouth"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.0646706)
+shape = SubResource("WorldBoundaryShape3D_4ppvu")
+
+[node name="BorderWest" type="StaticBody3D" parent="Box"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 1, 0)
+physics_material_override = SubResource("PhysicsMaterial_7dm0k")
+
+[node name="Mesh" type="MeshInstance3D" parent="Box/BorderWest"]
+transform = Transform3D(10, 0, 0, 0, 2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("BoxMesh_qod8c")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("2_r4jc3")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Box/BorderWest"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 2.98354e-09, 0, -0.0682559)
+shape = SubResource("WorldBoundaryShape3D_4ppvu")
+
+[node name="BorderEast" type="StaticBody3D" parent="Box"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5, 1, 0)
+physics_material_override = SubResource("PhysicsMaterial_7dm0k")
+
+[node name="Mesh2" type="MeshInstance3D" parent="Box/BorderEast"]
+transform = Transform3D(10, 0, 0, 0, 2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("BoxMesh_qod8c")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("2_r4jc3")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Box/BorderEast"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.60336e-08, 0, 0.0942373)
+shape = SubResource("WorldBoundaryShape3D_4ppvu")

@@ -1,0 +1,92 @@
+[gd_scene load_steps=11 format=3 uid="uid://dpnoq3l7bh8p4"]
+
+[ext_resource type="PackedScene" uid="uid://b5ms3rtogvn86" path="res://Scenes/table.tscn" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cw3hi5ubpete5" path="res://Scenes/die.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://ci8u3u8gxd0xk" path="res://Scripts/main.gd" id="1_lquwl"]
+[ext_resource type="Script" uid="uid://dpwf2qx387t2k" path="res://die_cam.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://bbejjon06cis8" path="res://Scripts/dice.gd" id="4_7mycd"]
+[ext_resource type="SystemFont" uid="uid://0lji7hu3cvas" path="res://Fonts/new_system_font.tres" id="5_lquwl"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
+sky_top_color = Color(0.275125, 0.411183, 0.834151, 1)
+ground_bottom_color = Color(0.12269, 0.00214408, 0.0215425, 1)
+
+[sub_resource type="Sky" id="Sky_0xm2m"]
+sky_material = SubResource("ProceduralSkyMaterial_ig7tw")
+
+[sub_resource type="Environment" id="Environment_ig7tw"]
+background_mode = 2
+sky = SubResource("Sky_0xm2m")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_0xm2m"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_lquwl")
+
+[node name="Table" parent="." instance=ExtResource("1_1bvp3")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ig7tw")
+camera_attributes = SubResource("CameraAttributesPractical_0xm2m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.587022, -0.733589, 0.342421, 0, 0.422966, 0.906145, -0.809571, -0.531928, 0.248291, -5.58254, 2.59834, 1.55114)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, -1.52244e-08, -2.06772e-08, 2.54312e-08, 0.475993, 0.879449, -3.54689e-09, -0.879449, 0.475993, -1.78814e-06, 9.38382, 4.01516)
+script = ExtResource("3_h2yge")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+light_energy = 3.586
+omni_range = 11.0
+
+[node name="Dice" type="Node3D" parent="."]
+auto_translate_mode = 2
+script = ExtResource("4_7mycd")
+
+[node name="Die" parent="Dice" instance=ExtResource("1_ig7tw")]
+transform = Transform3D(0.754332, 0.656494, 0, -0.564651, 0.648802, -0.510123, -0.334892, 0.384802, 0.860102, 0.01192, 7.7352, -0.00939894)
+
+[node name="Die2" parent="Dice" instance=ExtResource("1_ig7tw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="UI" type="Control" parent="."]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -39.0
+offset_top = -75.0
+offset_right = 61.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="RollButton" type="Button" parent="UI"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 40
+text = "Roll"
+
+[node name="RollLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = -521.0
+offset_top = -563.0
+offset_right = -274.0
+offset_bottom = -384.0
+theme_override_fonts/font = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 50
+text = "1 + 2 = 3
+"
+
+[connection signal="pressed" from="UI/RollButton" to="." method="_on_roll_button_pressed"]
