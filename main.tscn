@@ -33,7 +33,7 @@ camera_attributes = SubResource("CameraAttributesPractical_0xm2m")
 transform = Transform3D(0.587022, -0.733589, 0.342421, 0, 0.422966, 0.906145, -0.809571, -0.531928, 0.248291, -5.58254, 2.59834, 1.55114)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, -1.52244e-08, -2.06772e-08, 2.54312e-08, 0.475993, 0.879449, -3.54689e-09, -0.879449, 0.475993, -1.78814e-06, 9.38382, 4.01516)
+transform = Transform3D(1, -1.52244e-08, -2.06772e-08, 2.46508e-08, 0.343791, 0.939046, -7.18777e-09, -0.939046, 0.343791, -1.78814e-06, 9.46307, 3.29493)
 script = ExtResource("3_h2yge")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
@@ -46,13 +46,16 @@ auto_translate_mode = 2
 script = ExtResource("4_7mycd")
 
 [node name="Die" parent="Dice" instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.336872, 0)
 
 [node name="Die2" parent="Dice" instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299141, 1.36123)
 
 [node name="Die3" parent="Dice" instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35861, -1.29012)
+
+[node name="Die4" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die5" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die6" parent="Dice" instance=ExtResource("1_ig7tw")]
 
 [node name="UI" type="Control" parent="."]
 custom_minimum_size = Vector2(100, 40)

@@ -1,13 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://cw3hi5ubpete5"]
+[gd_scene load_steps=6 format=3 uid="uid://cw3hi5ubpete5"]
 
 [ext_resource type="PackedScene" uid="uid://mlnaanguwsoh" path="res://Models/wooden_rounded_edge_die_edit.glb" id="1_jfeu1"]
 [ext_resource type="Script" uid="uid://oddy6cuf6483" path="res://Scripts/die.gd" id="2_cv3b7"]
 [ext_resource type="PackedScene" uid="uid://qi0dqxbfog6j" path="res://Scenes/die_ray_cast.tscn" id="3_231m4"]
+[ext_resource type="PackedScene" uid="uid://ct2mkthkre7ba" path="res://Scenes/selection_marker.tscn" id="4_sg6ru"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jfeu1"]
 size = Vector3(0.661, 0.661, 0.661)
 
-[node name="Die" instance=ExtResource("1_jfeu1")]
+[node name="Die" groups=["Die"] instance=ExtResource("1_jfeu1")]
 script = ExtResource("2_cv3b7")
 
 [node name="Sketchfab_model" parent="." index="0"]
@@ -48,5 +49,8 @@ value = 2
 transform = Transform3D(1, 0, 0, 0, -2.75013e-08, -1, 0, 0.629157, -4.37114e-08, 0, 0, 0.3)
 target_position = Vector3(0, 0.15, 0)
 value = 1
+
+[node name="SelectionMarker" parent="." index="3" instance=ExtResource("4_sg6ru")]
+visible = false
 
 [connection signal="sleeping_state_changed" from="." to="." method="_on_sleeping_state_changed"]

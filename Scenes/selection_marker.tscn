@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://ct2mkthkre7ba"]
+
+[ext_resource type="Material" uid="uid://b8pm6bvqhxnsg" path="res://Materials/highlight_material.tres" id="1_kmf8f"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jbe3l"]
+
+[node name="SelectionMarker" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0924697, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_jbe3l")
+surface_material_override/0 = ExtResource("1_kmf8f")

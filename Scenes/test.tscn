@@ -6,15 +6,10 @@
 [node name="Test" type="Node3D"]
 script = ExtResource("1_lc1oi")
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 2.00793, 0, 0, 0, 1, 0, -0.945, 0)
-exclude_parent = false
-target_position = Vector3(0, 1.095, 0)
-hit_from_inside = true
-hit_back_faces = false
-
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.869124, 0.494594, 0, -0.494594, 0.869124, 0, 0.708489, 0.686426)
+transform = Transform3D(1, 0, 0, 0, 0.841096, 0.540886, 0, -0.540886, 0.841096, 0, 1.13522, 1.58015)
 
 [node name="Die" parent="." instance=ExtResource("2_8od7v")]
 gravity_scale = 0.0
+
+[connection signal="input_event" from="Die" to="." method="_on_die_input_event"]

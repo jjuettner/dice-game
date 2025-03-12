@@ -30,11 +30,10 @@ func is_rolling():
 
 func roll_all():
 	for die in dice:
-		die.roll()
+		if not die.is_selected:
+			die.roll()
 	wait_for_score = true
 	label_total.text = str(Global.LABEL_ROLL_TOTAL,"??")
 	var empty_values_string = str(values.map(func(x): return "?"))
-	print(empty_values_string)
 	empty_values_string = empty_values_string.replace('"','')
-	print(empty_values_string)
 	label_values.text = empty_values_string
