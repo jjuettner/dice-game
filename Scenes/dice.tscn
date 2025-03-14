@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3krgivlyil26"]
+
+[ext_resource type="Script" uid="uid://bbejjon06cis8" path="res://Scripts/dice.gd" id="1_7cx2c"]
+[ext_resource type="PackedScene" uid="uid://cw3hi5ubpete5" path="res://Scenes/die.tscn" id="2_3jar1"]
+
+[node name="Dice" type="Node3D"]
+auto_translate_mode = 2
+script = ExtResource("1_7cx2c")
+
+[node name="Die" parent="." instance=ExtResource("2_3jar1")]
+
+[node name="Die2" parent="." instance=ExtResource("2_3jar1")]
+
+[node name="Die3" parent="." instance=ExtResource("2_3jar1")]
+
+[node name="Die4" parent="." instance=ExtResource("2_3jar1")]
+
+[node name="Die5" parent="." instance=ExtResource("2_3jar1")]
+
+[node name="Die6" parent="." instance=ExtResource("2_3jar1")]

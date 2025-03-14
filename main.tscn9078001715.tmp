@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://dpnoq3l7bh8p4"]
+[gd_scene load_steps=12 format=3 uid="uid://dpnoq3l7bh8p4"]
 
 [ext_resource type="PackedScene" uid="uid://b5ms3rtogvn86" path="res://Scenes/table.tscn" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cw3hi5ubpete5" path="res://Scenes/die.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://ci8u3u8gxd0xk" path="res://Scripts/main.gd" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://dja5lx1dojjds" path="res://Scripts/farkle.gd" id="2_272bh"]
 [ext_resource type="Script" uid="uid://dpwf2qx387t2k" path="res://die_cam.gd" id="3_h2yge"]
-[ext_resource type="PackedScene" uid="uid://c3krgivlyil26" path="res://Scenes/dice.tscn" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://bbejjon06cis8" path="res://Scripts/dice.gd" id="4_7mycd"]
 [ext_resource type="SystemFont" uid="uid://0lji7hu3cvas" path="res://Fonts/new_system_font.tres" id="5_lquwl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
@@ -44,7 +45,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 light_energy = 3.586
 omni_range = 11.0
 
-[node name="Dice" parent="." instance=ExtResource("5_7mycd")]
+[node name="Dice" type="Node3D" parent="."]
+auto_translate_mode = 2
+script = ExtResource("4_7mycd")
+
+[node name="Die" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die2" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die3" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die4" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die5" parent="Dice" instance=ExtResource("1_ig7tw")]
+
+[node name="Die6" parent="Dice" instance=ExtResource("1_ig7tw")]
 
 [node name="UI" type="Control" parent="."]
 custom_minimum_size = Vector2(100, 40)
@@ -69,21 +84,6 @@ grow_horizontal = 0
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 40
 text = "Roll"
-
-[node name="CommitButton" type="Button" parent="UI"]
-custom_minimum_size = Vector2(200, 40)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -235.0
-offset_top = 135.0
-offset_right = -35.0
-offset_bottom = 213.0
-grow_horizontal = 0
-theme_override_fonts/font = ExtResource("5_lquwl")
-theme_override_font_sizes/font_size = 40
-text = "Lock In"
 
 [node name="RollTotalLabel" type="Label" parent="UI"]
 layout_mode = 1
@@ -138,7 +138,7 @@ layout_mode = 2
 theme_override_constants/line_spacing = -15
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 35
-text = "0"
+text = "1050"
 
 [node name="RoundScoreLabel" type="Label" parent="UI/ScorePanel/VBoxContainer"]
 layout_mode = 2
@@ -153,10 +153,9 @@ layout_mode = 2
 theme_override_constants/line_spacing = -15
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 35
-text = "0"
+text = "600"
 uppercase = true
 
 [connection signal="roll_finished" from="Dice" to="." method="_on_dice_roll_finished"]
-[connection signal="selected" from="Dice" to="." method="_on_dice_selected"]
+[connection signal="roll_started" from="Dice" to="." method="_on_dice_roll_started"]
 [connection signal="pressed" from="UI/RollButton" to="." method="_on_roll_button_pressed"]
-[connection signal="pressed" from="UI/CommitButton" to="Farkle" method="_on_commit_button_pressed"]

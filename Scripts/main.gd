@@ -2,23 +2,28 @@ extends Node3D
 
 @onready var dice = $Dice
 @onready var camera = $Camera3D
-#@onready var die_scene : PackedScene = load("res://Scenes/die.tscn")
 @onready var selected_die = $Dice/Die
+@onready var farkle = $Farkle
+@onready var roll_button = $UI/RollButton
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	handleSelection()
 	pass
 		
 		
 func handleSelection():
-	var new_selection = get_object_at_cursor()
+	var new_selection = Global.get_object_at_cursor(self.get_world_3d(), camera)
 	if(new_selection != selected_die):	
 		if(is_die(selected_die)):
 			selected_die.mouse_exit()
 		if(is_die(new_selection)):
 			new_selection.mouse_enter()
 	selected_die = new_selection
+
+
+
+###### HELPERS ######
 		
 func is_die(object):
 	if object:
@@ -26,27 +31,33 @@ func is_die(object):
 			if object.is_in_group("Die"):
 				return true
 	return false
-	
+
+
+
+###### EVENTS ######
 
 func _on_roll_button_pressed() -> void:
 	dice.roll_all()
 
-#func show_selection_marker(die: RigidBody3D):
-	#var marker = selection_marker.instantiate()  # Instantiate the scene
-	#marker.global_transform.origin = die["position"]  # Place at hit position
-	#add_child(marker)  # Add to scene
+func _on_dice_roll_finished(dice : Array) -> void:
+	# farkle.commit_roll(res["values"])
+	var non_locked_dice = dice.filter(func(x): return not x.is_locked)
+	var potential_score = farkle.evaluate_roll(non_locked_dice)
+	print(str("potential_score: ", potential_score, non_locked_dice.map(func(x): return x.value)))
+	if potential_score == 0:
+		farkle.bust()
+	# print("update round score label")
+	# print("_on_dice_roll_finished")
+	roll_button.visible = true
 
-func get_object_at_cursor():
-	var space_state = get_world_3d().direct_space_state  # Get the physics space
-	var mouse_pos = get_viewport().get_mouse_position()  # Get mouse position
-	var ray_origin = camera.project_ray_origin(mouse_pos)  # Convert to 3D position
-	var ray_end = ray_origin + camera.project_ray_normal(mouse_pos) * 1000  # Cast the ray far
 
-	# Define raycast query
-	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	query.collide_with_areas = true  # Enable area collision if needed
+func _on_dice_roll_started() -> void:
+	print("_on_dice_roll_started")
+	roll_button.visible = false
 
-	var result = space_state.intersect_ray(query).collider  # Perform the raycast
 
-	return result
-		
+func _on_dice_selected() -> void:
+	print("die selected, evaluate...")
+	var tmp_score = farkle.evaluate_selected()
+	print(str("die selected, evaluate... ",tmp_score))
+	$UI/ScorePanel/VBoxContainer/RoundScore.text = str(tmp_score)

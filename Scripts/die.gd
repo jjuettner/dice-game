@@ -11,18 +11,20 @@ var throw_strength = 10
 var spin_strength = .5
 var rolling = false
 var value: int
-var is_selected : bool = false
 var has_focus : bool = false
+var is_selected : bool = false
+var is_locked : bool = false
 
-#signal roll_finished(value)
+signal selected(die)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("select"):
 		handle_click()
 	
 func handle_click():
 	if has_focus:
 		is_selected = not is_selected
+		selected.emit(self)
 		update_marker_state()
 
 func update_marker_state():
@@ -41,24 +43,25 @@ func mouse_exit():
 	if not is_selected:
 		marker.visible = false
 
+
 func roll():
 	freeze = false
 	rolling = true
 	value = 0
-	apply_impulse(random_up_vector(throw_strength))
-	apply_torque_impulse(random_vector(spin_strength))
+	apply_impulse(Global.random_up_vector(throw_strength))
+	apply_torque_impulse(Global.random_vector(spin_strength))
 	
-func random_vector(strength):
-	var x = randf_range(-1*strength,strength)
-	var y = randf_range(-1*strength,strength)
-	var z = randf_range(-1*strength,strength)
-	return Vector3(x,y,z)
+func reset():
+	value = 0
+	rolling = false
+	has_focus = false
+	marker.visible = false
+	freeze = false
+	is_selected = false
+	is_locked = false
 
-func random_up_vector(strength):
-	var x = randf_range(-1*strength,strength)
-	var y = randf_range(0.3*strength,strength)
-	var z = randf_range(-1*strength,strength)
-	return Vector3(x,y,z)
+
+###### EVENTS ######
 
 func _on_sleeping_state_changed() -> void:
 	var result : int = 0;
@@ -66,10 +69,9 @@ func _on_sleeping_state_changed() -> void:
 		for ray in raycasts:
 			var collides_with_table = ray.is_colliding() and ray.get_collider().is_in_group("Table")
 			if collides_with_table:
-				if result != 0: # prevent 
+				if result != 0:
 					roll()
 				result = ray.value
-				#roll_finished.emit(ray.value)
 		value = result
 		freeze = true
 		if value == 0:
