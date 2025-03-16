@@ -39,22 +39,13 @@ func is_die(object):
 func _on_roll_button_pressed() -> void:
 	dice.roll_all()
 
-func _on_dice_roll_finished(dice : Array) -> void:
-	# farkle.commit_roll(res["values"])
-	var non_locked_dice = dice.filter(func(x): return not x.is_locked)
-	var potential_score = farkle.evaluate_roll(non_locked_dice)
-	print(str("potential_score: ", potential_score, non_locked_dice.map(func(x): return x.value)))
-	if potential_score == 0:
-		farkle.bust()
-	# print("update round score label")
-	# print("_on_dice_roll_finished")
-	roll_button.visible = true
-
+func _on_dice_roll_finished(_dice : Array) -> void:
+	#roll_button.visible = true
+	pass
 
 func _on_dice_roll_started() -> void:
 	print("_on_dice_roll_started")
 	roll_button.visible = false
-
 
 func _on_dice_selected() -> void:
 	print("die selected, evaluate...")

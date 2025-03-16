@@ -9,7 +9,7 @@ var wait_for_score = true
 var total_value = 0
 var values = []
 
-signal roll_finished(res: Dictionary)
+signal roll_finished(dice: Array)
 signal roll_started()
 signal selected()
 
@@ -19,18 +19,6 @@ func _ready() -> void:
 	pass
 
 func _process(_delta: float) -> void:	
-	# if wait_for_score and not is_rolling():
-	# 	total_value = 0
-	# 	values = []
-	# 	for die in dice:
-	# 		if not die.is_locked:
-	# 			values.append(die.value)
-	# 			total_value += die.value
-	# 	label_total.text = str(Global.LABEL_ROLL_TOTAL,total_value)
-	# 	values.sort()
-	# 	label_values.text = str(values)
-	# 	wait_for_score = false
-	# 	roll_finished.emit(values)
 	if wait_for_score and not is_rolling():
 		total_value = 0
 		values = []
@@ -58,7 +46,7 @@ func roll_all():
 	wait_for_score = true
 	roll_started.emit()
 	label_total.text = str(Global.LABEL_ROLL_TOTAL,"??")
-	var empty_values_string = str(values.map(func(x): return "?"))
+	var empty_values_string = str(values.map(func(_x): return "?"))
 	empty_values_string = empty_values_string.replace('"','')
 	label_values.text = empty_values_string
 
@@ -68,5 +56,5 @@ func reset():
 
 ##### EVENTS #####
 
-func die_selected(die):
+func die_selected(_die):
 	selected.emit()

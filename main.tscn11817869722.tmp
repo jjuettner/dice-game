@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dpnoq3l7bh8p4"]
+[gd_scene load_steps=11 format=3 uid="uid://dpnoq3l7bh8p4"]
 
 [ext_resource type="PackedScene" uid="uid://b5ms3rtogvn86" path="res://Scenes/table.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ci8u3u8gxd0xk" path="res://Scripts/main.gd" id="1_lquwl"]
@@ -19,9 +19,6 @@ background_mode = 2
 sky = SubResource("Sky_0xm2m")
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_0xm2m"]
-
-[sub_resource type="SystemFont" id="SystemFont_7mycd"]
-font_weight = 800
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_lquwl")
@@ -89,7 +86,6 @@ theme_override_font_sizes/font_size = 40
 text = "Lock In"
 
 [node name="RollTotalLabel" type="Label" parent="UI"]
-visible = false
 layout_mode = 1
 offset_left = 8.0
 offset_top = 545.0
@@ -114,7 +110,7 @@ layout_mode = 2
 offset_left = 3.0
 offset_top = 4.0
 offset_right = 142.0
-offset_bottom = 394.0
+offset_bottom = 247.0
 scale = Vector2(1.2, 1)
 size_flags_vertical = 3
 
@@ -129,22 +125,12 @@ offset_right = 55.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LivesLabel" type="Label" parent="UI/ScorePanel/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_constants/line_spacing = -15
-theme_override_fonts/font = SubResource("SystemFont_7mycd")
-theme_override_font_sizes/font_size = 29
-text = "<3 <3 <3"
-uppercase = true
-
 [node name="TotalScoreLabel" type="Label" parent="UI/ScorePanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = -15
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 24
-text = "
-Total: "
+text = "Total: "
 uppercase = true
 
 [node name="TotalScore" type="Label" parent="UI/ScorePanel/VBoxContainer"]
@@ -164,26 +150,6 @@ uppercase = true
 
 [node name="RoundScore" type="Label" parent="UI/ScorePanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/line_spacing = -15
-theme_override_fonts/font = ExtResource("5_lquwl")
-theme_override_font_sizes/font_size = 35
-text = "0"
-uppercase = true
-
-[node name="TargetScoreLabel" type="Label" parent="UI/ScorePanel/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.892347, 0.727867, 0.0886876, 1)
-theme_override_constants/line_spacing = -15
-theme_override_fonts/font = ExtResource("5_lquwl")
-theme_override_font_sizes/font_size = 30
-text = "
-
-Target:"
-uppercase = true
-
-[node name="TargetScore" type="Label" parent="UI/ScorePanel/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.894118, 0.729412, 0.0901961, 1)
 theme_override_constants/line_spacing = -15
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 35
@@ -316,12 +282,11 @@ text = "Bust!"
 [node name="BustTimer" type="Timer" parent="UI/BustPanel"]
 wait_time = 1.6
 
+[connection signal="bust" from="Farkle" to="." method="_on_farkle_bust"]
+[connection signal="game_over" from="Farkle" to="." method="_on_farkle_game_over"]
 [connection signal="roll_finished" from="Dice" to="." method="_on_dice_roll_finished"]
 [connection signal="roll_finished" from="Dice" to="Farkle" method="_on_dice_roll_finished"]
 [connection signal="selected" from="Dice" to="." method="_on_dice_selected"]
 [connection signal="pressed" from="UI/RollButton" to="." method="_on_roll_button_pressed"]
 [connection signal="pressed" from="UI/CommitButton" to="Farkle" method="_on_commit_button_pressed"]
-[connection signal="pressed" from="UI/GameOverPanel/RetryButton" to="Farkle" method="_on_retry_button_pressed"]
-[connection signal="pressed" from="UI/WinPanel/RetryButton" to="Farkle" method="_on_retry_button_pressed"]
-[connection signal="pressed" from="UI/WinPanel/KeepPlayingButton" to="Farkle" method="_on_keep_playing_button_pressed"]
 [connection signal="timeout" from="UI/BustPanel/BustTimer" to="Farkle" method="_on_bust_timer_timeout"]

@@ -2,6 +2,7 @@ extends Node
 
 const LABEL_ROLL_TOTAL = "Total: "
 const LABEL_ROLL_Values = "Values: "
+const FINAL_SCORE = "Final Score: "
 
 func random_vector(strength):
 	var x = randf_range(-1*strength,strength)
