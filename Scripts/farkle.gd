@@ -1,13 +1,21 @@
 extends Node
 
 @onready var dice = $"../Dice"
-@onready var total_score_label = $"../UI/ScorePanel/VBoxContainer/TotalScore"
-@onready var round_score_label = $"../UI/ScorePanel/VBoxContainer/RoundScore"
+@export var total_score_label: Label
+@export var round_score_label: Label
+@export var throw_score_label: Label
+@export var target_score_label: Label
+@export var lives_label: Label
+@export var roll_button: Button
+@export var commit_button: Button
+
+signal is_bust()
 
 # var _player : int = 1
 var lives = 3
 var total_score : int = 0
 var round_score : int = 0
+var throw_score : int = 0
 var game_round : int = 1
 var target_score : int = 4000
 var is_game_over : bool = false
@@ -16,7 +24,9 @@ var dice_left : int = 6
 var round_values : Array = []
 
 func _ready() -> void:
-	$"../UI/ScorePanel/VBoxContainer/TargetScore".text = str(target_score)
+	target_score_label.text = str(target_score)
+	roll_button.visible = true
+	commit_button.visible = false
 
 func evaluate_selected():
 	var roll = []
@@ -25,9 +35,10 @@ func evaluate_selected():
 			roll.append(die)
 	return evaluate_roll(roll)
 
-func evaluate_roll(roll : Array) -> int:
+func evaluate_roll(roll : Array) -> Array:
 	var values_to_score = roll.map(func(d): return d.value)
 	var score = 0
+	var counted_dice = 0
 	var values : Dictionary = {}
 	for val : int in values_to_score:
 		values[val] = values.get(val, 0) + 1
@@ -45,30 +56,66 @@ func evaluate_roll(roll : Array) -> int:
 		var base_score = 0
 		if values[val] >= 3:
 			if(val == 1):
-				base_score = 100
+				base_score = 1000
 			else:
 				base_score += val * 100
 			score += base_score * (values[val] - 2)
 			for i in range(values[val]):
 				values_to_score.remove_at(values_to_score.find(val))
+				counted_dice += 1
 			
-	
 	# single dice
 	for val in values_to_score:
 		if val == 1:
 			score += 100
+			counted_dice += 1
 		if val == 5:
 			score += 50
+			counted_dice += 1
 
-	round_score = score
-	return score
+	# set_throw_score(score)
+	var is_held_dice_valid = roll.size() > 0 and roll.size() - counted_dice == 0 and score > 0  
+	return [score, is_held_dice_valid]
 
-func commit_roll(roll : Array):
-	round_score = evaluate_roll(roll)
-	total_score += round_score
+func set_total_score(score : int):
+	total_score = score
 	total_score_label.text = str(total_score)
-	round_score = 0
+
+func set_round_score(score : int):
+	round_score = score
 	round_score_label.text = str(round_score)
+
+func set_throw_score(score : int):
+	throw_score = score
+	throw_score_label.text = str(throw_score)
+
+
+func lose_life():
+	lives -= 1
+	var livesText = ""
+	for i in range(lives):
+		livesText += "<3 "
+	lives_label.text = livesText
+
+	if lives == 0:
+		game_over(false)
+		$"../UI/GameOverPanel".visible = true
+		$"../UI/GameOverPanel/FinalScoreLabel".text = str(Global.FINAL_SCORE, round_score)
+	else:
+		$"../UI/BustPanel".visible = true
+		$"../UI/BustPanel/BustTimer".start()
+
+
+func commit_roll():
+	set_round_score(round_score + throw_score)
+	set_throw_score(0)
+
+	var roll = []
+	for die in dice.get_children():
+		if not die.is_locked and die.is_selected:
+			roll.append(die)
+			die.is_locked = true
+
 	# append values
 	round_values = round_values + roll
 	dice_left -= roll.size()
@@ -78,42 +125,29 @@ func commit_roll(roll : Array):
 
 	# used all dice without bust
 	if dice_left == 0:
-		reset_dice()
+		dice.reset()
+		dice_left = dice.get_children().size()
 
-func reset_dice():
-	for die in dice.get_children():
-		die.reset()
-		dice_left += 1
+	commit_button.visible = false
 
-func finish_round():
-	pass
 
 func new_round():
+	set_total_score(total_score + round_score)
+	set_round_score(0)
+	lose_life()
+	dice.reset()
 	game_round += 1
-	total_score += round_score
-	round_score = 0
 	dice_left = 6
 
-# func new_game():
-# 	total_score = 0
-# 	game_round = 0
 
 func bust():
-	round_score = 0
-	lives -= 1
-	var livesText = ""
-	for i in lives:
-		livesText += "<3 "
-	$"../UI/ScorePanel/VBoxContainer/LivesLabel".text = livesText
+	set_throw_score(0)
+	set_round_score(0)
+	lose_life()
+	dice.reset()
+	commit_button.visible = false
+	is_bust.emit()
 
-	if lives == 0:
-		game_over(false)
-		$"../UI/GameOverPanel".visible = true
-		$"../UI/GameOverPanel/FinalScoreLabel".text = str(Global.FINAL_SCORE, total_score)
-	else:
-		$"../UI/BustPanel".visible = true
-		$"../UI/BustPanel/BustTimer".start()
-	reset_dice()
 
 func game_over(win: bool):
 	if win:
@@ -125,16 +159,16 @@ func game_over(win: bool):
 ###### EVENTS ######
 
 func _on_commit_button_pressed() -> void:
-	var roll = []
-	for die in dice.get_children():
-		if not die.is_locked and die.is_selected:
-			roll.append(die)
-			die.is_locked = true
-	commit_roll(roll)
+	commit_roll()
+	dice.roll_all()
+
+func _on_end_turn_button_pressed() -> void:
+	commit_roll()
+	new_round()
 
 func _on_dice_roll_finished(dice_array: Array) -> void:
 	var non_locked_dice = dice_array.filter(func(x): return not x.is_locked)
-	var potential_score = evaluate_roll(non_locked_dice)
+	var potential_score = evaluate_roll(non_locked_dice)[0]
 	print(str("potential_score: ", potential_score, non_locked_dice.map(func(x): return x.value)))
 	if potential_score == 0:
 		bust()
@@ -150,3 +184,16 @@ func _on_retry_button_pressed() -> void:
 
 func _on_keep_playing_button_pressed() -> void:
 	$"../UI/WinPanel".visible = false
+
+
+func _on_dice_selected() -> void:
+	print("die selected, evaluate...")
+	var evalResult = evaluate_selected()
+	print(evalResult)
+	var tmp_score = evalResult[0]
+	if evalResult[1]:
+		commit_button.visible = true
+	else:
+		commit_button.visible = false
+	print(str("die selected, evaluate... ",tmp_score))
+	set_throw_score(tmp_score)

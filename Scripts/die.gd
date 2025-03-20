@@ -48,7 +48,8 @@ func roll():
 	freeze = false
 	rolling = true
 	value = 0
-	apply_impulse(Global.random_up_vector(throw_strength))
+	global_position = Vector3.ONE * 3
+	apply_impulse(Global.random_throw_vector(throw_strength))
 	apply_torque_impulse(Global.random_vector(spin_strength))
 	
 func reset():

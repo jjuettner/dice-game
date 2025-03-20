@@ -26,8 +26,15 @@ font_weight = 800
 [node name="Main" type="Node3D"]
 script = ExtResource("1_lquwl")
 
-[node name="Farkle" type="Node3D" parent="."]
+[node name="Farkle" type="Node3D" parent="." node_paths=PackedStringArray("total_score_label", "round_score_label", "throw_score_label", "target_score_label", "lives_label", "roll_button", "commit_button")]
 script = ExtResource("2_272bh")
+total_score_label = NodePath("../UI/ScorePanel/VBoxContainer/TotalScore")
+round_score_label = NodePath("../UI/ScorePanel/VBoxContainer/RoundScore")
+throw_score_label = NodePath("../UI/ScorePanel/VBoxContainer/ThrowScore")
+target_score_label = NodePath("../UI/ScorePanel/VBoxContainer/TargetScore")
+lives_label = NodePath("../UI/ScorePanel/VBoxContainer/LivesLabel")
+roll_button = NodePath("../UI/RollButton")
+commit_button = NodePath("../UI/CommitButton")
 
 [node name="Table" parent="." instance=ExtResource("1_1bvp3")]
 
@@ -79,14 +86,29 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -235.0
-offset_top = 135.0
-offset_right = -35.0
-offset_bottom = 213.0
+offset_left = -233.0
+offset_top = 35.0
+offset_right = -33.0
+offset_bottom = 113.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 40
-text = "Lock In"
+text = "Continue"
+
+[node name="EndTurnButton" type="Button" parent="UI/CommitButton"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -202.0
+offset_top = 100.0
+offset_right = -2.0
+offset_bottom = 178.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 40
+text = "End Turn"
 
 [node name="RollTotalLabel" type="Label" parent="UI"]
 visible = false
@@ -114,7 +136,7 @@ layout_mode = 2
 offset_left = 3.0
 offset_top = 4.0
 offset_right = 142.0
-offset_bottom = 394.0
+offset_bottom = 497.0
 scale = Vector2(1.2, 1)
 size_flags_vertical = 3
 
@@ -163,6 +185,22 @@ text = "Round: "
 uppercase = true
 
 [node name="RoundScore" type="Label" parent="UI/ScorePanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -15
+theme_override_fonts/font = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 35
+text = "0"
+uppercase = true
+
+[node name="ThrowScoreLabel" type="Label" parent="UI/ScorePanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -15
+theme_override_fonts/font = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 24
+text = "Throw: "
+uppercase = true
+
+[node name="ThrowScore" type="Label" parent="UI/ScorePanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = -15
 theme_override_fonts/font = ExtResource("5_lquwl")
@@ -316,11 +354,14 @@ text = "Bust!"
 [node name="BustTimer" type="Timer" parent="UI/BustPanel"]
 wait_time = 1.6
 
+[connection signal="is_bust" from="Farkle" to="." method="_on_farkle_is_bust"]
 [connection signal="roll_finished" from="Dice" to="." method="_on_dice_roll_finished"]
 [connection signal="roll_finished" from="Dice" to="Farkle" method="_on_dice_roll_finished"]
-[connection signal="selected" from="Dice" to="." method="_on_dice_selected"]
-[connection signal="pressed" from="UI/RollButton" to="." method="_on_roll_button_pressed"]
+[connection signal="roll_started" from="Dice" to="." method="_on_dice_roll_started"]
+[connection signal="selected" from="Dice" to="Farkle" method="_on_dice_selected"]
+[connection signal="pressed" from="UI/RollButton" to="Dice" method="_on_roll_button_pressed"]
 [connection signal="pressed" from="UI/CommitButton" to="Farkle" method="_on_commit_button_pressed"]
+[connection signal="pressed" from="UI/CommitButton/EndTurnButton" to="Farkle" method="_on_end_turn_button_pressed"]
 [connection signal="pressed" from="UI/GameOverPanel/RetryButton" to="Farkle" method="_on_retry_button_pressed"]
 [connection signal="pressed" from="UI/WinPanel/RetryButton" to="Farkle" method="_on_retry_button_pressed"]
 [connection signal="pressed" from="UI/WinPanel/KeepPlayingButton" to="Farkle" method="_on_keep_playing_button_pressed"]

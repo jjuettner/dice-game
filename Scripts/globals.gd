@@ -10,10 +10,10 @@ func random_vector(strength):
 	var z = randf_range(-1*strength,strength)
 	return Vector3(x,y,z)
 
-func random_up_vector(strength):
-	var x = randf_range(-1*strength,strength)
+func random_throw_vector(strength):
+	var x = randf_range(0,strength) * -1
 	var y = randf_range(0.3*strength,strength) + 1
-	var z = randf_range(-1*strength,strength)
+	var z = randf_range(-1 * strength,strength)
 	return Vector3(x,y,z)
 
 func get_object_at_cursor(world: World3D, camera: Camera3D):
